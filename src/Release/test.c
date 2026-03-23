@@ -1,4 +1,4 @@
-// test program written in C
+// test program written in C build with ./chibicc -S -o test.asm test.c and copy the made asm into program.asm
 
 // bios specific func calls
 char char_to_print;
