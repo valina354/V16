@@ -47,6 +47,9 @@ uint16_t Peripherals::read_port(uint16_t port) {
     }
     case 0x04: // Read Cursor State
         return cursor_enabled ? 1 : 0;
+    default:
+        std::cout << "Invalid IO Read: " << port << std::endl;
+        break;
     }
     return 0;
 }
@@ -73,6 +76,9 @@ void Peripherals::write_port(uint16_t port, uint16_t value) {
         break;
     case 0x12: // Fill Screen with Char+Attr
         std::fill(vga_text_buffer.begin(), vga_text_buffer.end(), value);
+        break;
+    default:
+        std::cout << "Invalid IO Write: " << port << std::endl;
         break;
     }
 }
