@@ -73,50 +73,59 @@ void Peripherals::write_port(uint16_t port, uint16_t value) {
 
 void Peripherals::render_text_mode() {
     std::lock_guard<std::mutex> lock(vga_mutex);
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
+
+    static SDL_Texture* screen_texture = SDL_CreateTexture(
+        renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING,
+        SCREEN_WIDTH, SCREEN_HEIGHT
+    );
+
+    std::vector<uint32_t> pixels(SCREEN_WIDTH * SCREEN_HEIGHT, 0xFF000000);
 
     for (int y = 0; y < TEXT_ROWS; ++y) {
         for (int x = 0; x < TEXT_COLS; ++x) {
-            int offset = y * TEXT_COLS + x;
-            uint16_t cell = vga_text_buffer[offset];
+            uint16_t cell = vga_text_buffer[y * TEXT_COLS + x];
             uint8_t ch = cell & 0xFF;
             uint8_t attr = (cell >> 8) & 0xFF;
 
-            uint8_t fg_idx = attr & 0x0F;
-            uint8_t bg_idx = (attr >> 4) & 0x0F;
+            SDL_Color fg = vga_palette[attr & 0x0F];
+            SDL_Color bg = vga_palette[(attr >> 4) & 0x0F];
+
+            uint32_t fg_color = (255 << 24) | (fg.r << 16) | (fg.g << 8) | fg.b;
+            uint32_t bg_color = (255 << 24) | (bg.r << 16) | (bg.g << 8) | bg.b;
 
             const unsigned char* glyph = vga_font_8x16[ch];
 
             for (int cy = 0; cy < CHAR_HEIGHT; ++cy) {
                 for (int cx = 0; cx < CHAR_WIDTH; ++cx) {
-                    if ((glyph[cy] >> (7 - cx)) & 1) {
-                        SDL_SetRenderDrawColor(renderer, vga_palette[fg_idx].r, vga_palette[fg_idx].g, vga_palette[fg_idx].b, 255);
-                    }
-                    else {
-                        SDL_SetRenderDrawColor(renderer, vga_palette[bg_idx].r, vga_palette[bg_idx].g, vga_palette[bg_idx].b, 255);
-                    }
-                    SDL_RenderDrawPoint(renderer, x * CHAR_WIDTH + cx, y * CHAR_HEIGHT + cy);
+                    bool is_set = (glyph[cy] >> (7 - cx)) & 1;
+                    pixels[(y * CHAR_HEIGHT + cy) * SCREEN_WIDTH + (x * CHAR_WIDTH + cx)] = is_set ? fg_color : bg_color;
                 }
             }
         }
     }
 
     if ((SDL_GetTicks() / 400) % 2 == 0) {
-        int cursor_x = cursor_pos % TEXT_COLS;
-        int cursor_y = cursor_pos / TEXT_COLS;
-        SDL_Rect cursor_rect = { cursor_x * CHAR_WIDTH, cursor_y * CHAR_HEIGHT + 14, CHAR_WIDTH, 2 };
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderFillRect(renderer, &cursor_rect);
+        int cx = (cursor_pos % TEXT_COLS) * CHAR_WIDTH;
+        int cy = (cursor_pos / TEXT_COLS) * CHAR_HEIGHT + 14;
+        for (int i = 0; i < CHAR_WIDTH; i++) {
+            pixels[cy * SCREEN_WIDTH + (cx + i)] = 0xFFFFFFFF;
+            pixels[(cy + 1) * SCREEN_WIDTH + (cx + i)] = 0xFFFFFFFF;
+        }
     }
+
+    SDL_UpdateTexture(screen_texture, nullptr, pixels.data(), SCREEN_WIDTH * sizeof(uint32_t));
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, screen_texture, nullptr, nullptr);
 }
 
 void Peripherals::update() {
+    SDL_Event e;
+    while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) {
+            cpu.halt();
+        }
+    }
+
     render_text_mode();
     SDL_RenderPresent(renderer);
-    SDL_Event e;
-    while (SDL_PollEvent(&e)) { 
-        if (e.type == SDL_QUIT) 
-            cpu.halt(); 
-    }
 }

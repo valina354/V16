@@ -12,20 +12,7 @@ void print_char(char c) {
     asm("MOV R0, 1");
     asm("MOV R2, char_to_print");
     asm("MOV R2, [R2]");
-    asm("INT 32");
-    asm("POP R2");
-    asm("POP R0");
-}
-
-void print_number(int c) {
-    num_to_print = c;
-
-    asm("PUSH R0");
-    asm("PUSH R2");
-    asm("MOV R0, 5");
-    asm("MOV R2, num_to_print");
-    asm("MOV R2, [R2]");
-    asm("INT 32");
+    asm("INT 0x10");
     asm("POP R2");
     asm("POP R0");
 }
@@ -36,6 +23,31 @@ void print_string(char *str) {
     while (str[i] != 0) {
         print_char(str[i]);
         i++;
+    }
+}
+
+void print_number(int n) {
+    char buffer[16];
+    int i = 0;
+
+    if (n == 0) {
+        print_char('0');
+        return;
+    }
+
+    if (n < 0) {
+        print_char('-');
+        n = -n;
+    }
+
+    while (n > 0) {
+        int digit = n % 10;
+        buffer[i++] = '0' + digit;
+        n /= 10;
+    }
+
+    while (i > 0) {
+        print_char(buffer[--i]);
     }
 }
 

@@ -104,58 +104,6 @@ print_char_end:
     POPA
     RET
 
-print_number:
-    PUSHA
-    MOV R6, R2
-
-    CMP R6, 0
-    JMPGE print_num_abs_val
-
-    PUSH R3
-    MOV R3, 45
-    CALL print_char
-    POP R3
-
-    NEG R6
-
-print_num_abs_val:
-    MOV R3, 10
-    LEA R4, number_buffer_end
-
-    CMP R6, 0
-    JMPE print_zero_case
-
-print_num_loop:
-    MOV R7, R6
-    MOD R7, R3
-    ADD R7, 48
-    DEC R4
-    MOV [R4], R7
-
-    DIV R6, R3
-    CMP R6, 0
-    JMPNE print_num_loop
-
-print_num_emit:
-    LEA R5, number_buffer_end
-print_emit_loop:
-    CMP R4, R5
-    JMPGE print_num_done
-    MOV R3, [R4]
-    CALL print_char
-    INC R4
-    JMP print_emit_loop
-
-print_zero_case:
-    DEC R4
-    MOV R7, 48
-    MOV [R4], R7
-    JMP print_num_emit
-
-print_num_done:
-    POPA
-    RET
-
 get_cursor_pos:
     PUSH R0
     PUSH R1
@@ -199,15 +147,16 @@ set_cursor_pos:
     POPA
     RET
 
+; INT 0x00-0x09 reserved for hardware interrupts
 setup_ivt:
     LEA R0, div_zero_handler
-    MOV R1, 0
+    MOV R1, 0x00
     MOV [R1], R0
     LEA R0, invalid_op_handler
-    MOV R1, 1
+    MOV R1, 0x01
     MOV [R1], R0
     LEA R0, video_service
-    MOV R1, 32
+    MOV R1, 0x10
     MOV [R1], R0
     RET
 
@@ -221,8 +170,6 @@ video_service:
     JMPE vs_get_cursor
     CMP R0, 0x04
     JMPE vs_clear_screen
-    CMP R0, 0x05
-    JMPE vs_print_number
     JMP video_service_end
 vs_print_char:
     MOV R3, R2
@@ -241,9 +188,6 @@ vs_clear_screen:
     MOV [R13], R2
     MOV R1, R2
     CALL clear_screen
-    JMP video_service_end
-vs_print_number:
-    CALL print_number
     JMP video_service_end
 video_service_end:
     POPA

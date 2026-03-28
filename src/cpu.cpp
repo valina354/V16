@@ -164,7 +164,7 @@ void CPU16::set_value(const Operand& operand, uint16_t value) {
 }
 
 void CPU16::trigger_interrupt(uint16_t vector_num) {
-    if (!get_flag(IF_MASK) && vector_num > 2) return;
+    if (!get_flag(IF_MASK)) return;
 
     reg[SP]--;
     mem.at(reg[SP]) = flags;
