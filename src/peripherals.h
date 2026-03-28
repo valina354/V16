@@ -32,6 +32,8 @@ private:
     uint16_t cursor_pos;
     uint16_t vram_address_ptr;
 
+    bool cursor_enabled;
+
     SDL_Color vga_palette[16];
 
     void render_text_mode();

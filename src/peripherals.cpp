@@ -15,6 +15,7 @@ Peripherals::Peripherals(CPU16& owner_cpu) : cpu(owner_cpu), window(nullptr), re
     cursor_pos = 0;
     crtc_address_register = 0;
     vram_address_ptr = 0;
+    cursor_enabled = true;
 
     vga_palette[0] = {0,0,0,255}; vga_palette[1] = {0,0,170,255}; vga_palette[2] = {0,170,0,255}; vga_palette[3] = {0,170,170,255};
     vga_palette[4] = {170,0,0,255}; vga_palette[5] = {170,0,170,255}; vga_palette[6] = {170,85,0,255}; vga_palette[7] = {170,170,170,255};
@@ -44,6 +45,8 @@ uint16_t Peripherals::read_port(uint16_t port) {
         }
         return 0;
     }
+    case 0x04: // Read Cursor State
+        return cursor_enabled ? 1 : 0;
     }
     return 0;
 }
@@ -56,6 +59,9 @@ void Peripherals::write_port(uint16_t port, uint16_t value) {
     case 0x02: // Write Cursor Byte
         if (crtc_address_register == 0x0E) cursor_pos = (cursor_pos & 0x00FF) | (value << 8);
         else if (crtc_address_register == 0x0F) cursor_pos = (cursor_pos & 0xFF00) | (value & 0xFF);
+        break;
+    case 0x04: // Cursor Enable/Disable
+        cursor_enabled = (value & 0x01);
         break;
     case 0x10: // Set VRAM Pointer
         vram_address_ptr = value;
@@ -104,7 +110,7 @@ void Peripherals::render_text_mode() {
         }
     }
 
-    if ((SDL_GetTicks() / 400) % 2 == 0) {
+    if (cursor_enabled && (SDL_GetTicks() / 400) % 2 == 0) {
         int cx = (cursor_pos % TEXT_COLS) * CHAR_WIDTH;
         int cy = (cursor_pos / TEXT_COLS) * CHAR_HEIGHT + 14;
         for (int i = 0; i < CHAR_WIDTH; i++) {
