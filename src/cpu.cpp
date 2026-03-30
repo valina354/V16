@@ -7,6 +7,11 @@
 #include <stdexcept>
 #include <iomanip>
 
+#ifdef _WIN32
+#undef IN
+#undef OUT
+#endif
+
 void to_upper_str(std::string& s) {
     std::transform(s.begin(), s.end(), s.begin(),
         [](unsigned char c) { return std::toupper(c); });

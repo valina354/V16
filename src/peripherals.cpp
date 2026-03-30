@@ -47,6 +47,17 @@ uint16_t Peripherals::read_port(uint16_t port) {
     }
     case 0x04: // Read Cursor State
         return cursor_enabled ? 1 : 0;
+    case 0x05: // Read VRAM Pointer
+        return vram_address_ptr;
+    case 0x08: // Keyboard Status: returns buffer size
+        return (uint16_t)keyboard_buffer.size();
+    case 0x09: // Keyboard Data: pop oldest key
+        if (!keyboard_buffer.empty()) {
+            uint16_t val = keyboard_buffer.front();
+            keyboard_buffer.erase(keyboard_buffer.begin());
+            return val;
+        }
+        return 0;
     default:
         std::cout << "Invalid IO Read: " << port << std::endl;
         break;
@@ -66,15 +77,15 @@ void Peripherals::write_port(uint16_t port, uint16_t value) {
     case 0x04: // Cursor Enable/Disable
         cursor_enabled = (value & 0x01);
         break;
-    case 0x10: // Set VRAM Pointer
+    case 0x05: // Set VRAM Pointer
         vram_address_ptr = value;
         break;
-    case 0x11: // Write Char+Attr to VRAM and increment pointer
+    case 0x06: // Write Char+Attr to VRAM and increment pointer
         if (vram_address_ptr < TEXT_COLS * TEXT_ROWS) {
             vga_text_buffer[vram_address_ptr++] = value;
         }
         break;
-    case 0x12: // Fill Screen with Char+Attr
+    case 0x07: // Fill Screen with Char+Attr
         std::fill(vga_text_buffer.begin(), vga_text_buffer.end(), value);
         break;
     default:
@@ -131,6 +142,25 @@ void Peripherals::render_text_mode() {
 }
 
 void Peripherals::update() {
+#ifdef _WIN32
+    for (int vk = 0x08; vk < 0x5B; vk++) {
+        short state = GetAsyncKeyState(vk);
+        bool is_down = (state & 0x8000) != 0;
+
+        if (is_down && !last_key_state[vk]) {
+            uint8_t ascii = 0;
+            if (vk >= 'A' && vk <= 'Z') ascii = (GetAsyncKeyState(VK_SHIFT) & 0x8000) ? vk : (vk + 32);
+            else if (vk >= '0' && vk <= '9') ascii = vk;
+            else if (vk == VK_SPACE) ascii = ' ';
+            else if (vk == VK_RETURN) ascii = 13;
+            else if (vk == VK_BACK) ascii = 8;
+
+            if (ascii != 0) keyboard_buffer.push_back(ascii);
+        }
+        last_key_state[vk] = is_down;
+    }
+#endif
+
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) {

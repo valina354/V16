@@ -7,6 +7,9 @@
 #include <mutex>
 #include <SDL.h>
 #include "cpu.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 class Peripherals {
 private:
@@ -14,11 +17,14 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     SDL_AudioDeviceID audio_device;
-    std::vector<uint8_t> keyboard_buffer;
     uint32_t last_pit_tick_time;
 
     std::mutex vga_mutex;
+#ifdef _WIN32
+    std::vector<uint8_t> keyboard_buffer;
     std::mutex keyboard_mutex;
+    bool last_key_state[256] = { 0 };
+#endif
 
     static const int CHAR_WIDTH = 8;
     static const int CHAR_HEIGHT = 16;

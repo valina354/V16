@@ -45,7 +45,7 @@ clear_screen:
     MOV R12, R1
     SHL R12, 8
     OR R12, 32         ; Space character with attribute in R1
-    MOV R0, 0x12       ; Port 0x12: Screen Fill
+    MOV R0, 0x07       ; Port 0x07: Screen Fill
     OUT R0, R12
     MOV R10, 0
     CALL set_cursor_pos
@@ -82,9 +82,9 @@ print_char:
     SHL R2, 8
     OR R2, R3
     
-    MOV R0, 0x10       ; Port 0x10: VRAM Address
+    MOV R0, 0x05       ; Port 0x05: VRAM Address
     OUT R0, R10
-    MOV R0, 0x11       ; Port 0x11: VRAM Data
+    MOV R0, 0x06       ; Port 0x06: VRAM Data
     OUT R0, R2
     
     INC R10
@@ -158,6 +158,9 @@ setup_ivt:
     LEA R0, video_service
     MOV R1, 0x10
     MOV [R1], R0
+    LEA R0, keyboard_service
+    MOV R1, 0x11
+    MOV [R1], R0
     RET
 
 video_service:
@@ -170,6 +173,8 @@ video_service:
     JMPE vs_get_cursor
     CMP R0, 0x04
     JMPE vs_clear_screen
+    CMP R0, 0x05
+    JMPE vs_cursor_enable
     JMP video_service_end
 vs_print_char:
     MOV R3, R2
@@ -189,8 +194,30 @@ vs_clear_screen:
     MOV R1, R2
     CALL clear_screen
     JMP video_service_end
+vs_cursor_enable:
+    MOV R0, 0x04
+    OUT R0, R2
+    JMP video_service_end
 video_service_end:
     POPA
+    IRET
+	
+keyboard_service:
+    CMP R0, 0x00
+    JMPE kb_getc
+    CMP R0, 0x01
+    JMPE kb_status
+    IRET
+
+kb_getc:
+    IN R1, 0x08
+    CMP R1, 0
+    JMPE kb_getc
+    IN R2, 0x09
+    IRET
+
+kb_status:
+    IN R2, 0x08
     IRET
 
 cpu_test:

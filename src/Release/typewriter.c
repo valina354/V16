@@ -1,8 +1,6 @@
-// test program written in C build with ./chibicc -S -o test.asm test.c and copy the made asm into program.asm
-
 // bios specific func calls
 char char_to_print;
-int num_to_print;
+char kb_result;
 
 void print_char(char c) {
     char_to_print = c;
@@ -15,6 +13,17 @@ void print_char(char c) {
     asm("INT 0x10");
     asm("POP R2");
     asm("POP R0");
+}
+
+char get_char() {
+    asm("PUSH R0");
+    asm("MOV R0, 0");
+    asm("INT 0x11");
+    asm("MOV R1, kb_result");
+    asm("MOV [R1], R2");
+    asm("POP R0");
+
+    return kb_result;
 }
 // end bios specific func calls
 
@@ -52,24 +61,15 @@ void print_number(int n) {
 }
 
 int main() {
-	print_string("\nHello from C!\n");
+    print_string("\nTypewriter.\n");
 
-	int x1 = 2;
-	int y1 = 7;
-	int result1 = x1 + y1;
+    while(1) {
+        char c = get_char();
 
-	print_string("2+7 is ");
-	print_number(result1);
-	print_string("\n");
-	
-	int x2 = 7;
-	int y2 = 10;
-	int result2 = x2 - y2;
-
-	print_string("7-10 is ");
-	print_number(result2);
-	
-	while(1){}
-
-    return 0;
+        if (c == 13) {
+            print_char(10);
+        } else {
+            print_char(c);
+        }
+    }
 }
