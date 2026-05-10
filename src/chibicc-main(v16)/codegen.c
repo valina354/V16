@@ -49,7 +49,7 @@ static void gen_addr(Node *node) {
   case ND_VAR:
     if (node->var->is_local) {
       // Local variable
-      println("    LEA R0, [BP - %d]", node->var->offset);
+      println("    LEA R0, [BP-%d]", node->var->offset);
     } else {
       // Global variable
       println("    MOV R0, %s", node->var->name);
@@ -72,13 +72,13 @@ static void load(Type *ty) {
   if (ty->kind == TY_ARRAY || ty->kind == TY_STRUCT || ty->kind == TY_UNION) {
     return;
   }
-  // All loads are 16-bit in this architecture
+
   println("    MOV R0, [R0]");
 }
 
 // Store R0 to an address that the stack top is pointing to.
 static void store(Type *ty) {
-  pop("R1"); // Pop address into R1
+  pop("R1");
 
   if (ty->kind == TY_STRUCT || ty->kind == TY_UNION) {
       for (int i = 0; i < ty->size; i+=2) {
@@ -87,8 +87,7 @@ static void store(Type *ty) {
       }
       return;
   }
-  
-  // All stores are 16-bit
+
   println("    MOV [R1], R0");
 }
 
@@ -127,7 +126,7 @@ static void gen_expr(Node *node) {
     store(node->ty);
     return;
   case ND_MEMZERO: {
-    println("    LEA R0, [BP - %d]", node->var->offset);
+    println("    LEA R0, [BP-%d]", node->var->offset);
     println("    MOV R1, 0");
     int words = node->var->ty->size / 2;
     if (words == 0) words = 1;
@@ -168,16 +167,18 @@ static void gen_expr(Node *node) {
     println(".L.end.%d:", c);
     return;
   }
-  case ND_NOT:
+  case ND_NOT: {
+    int c = count();
     gen_expr(node->lhs);
     println("    CMP R0, 0");
-    println("    JMPE .L.not.true.%d", count());
+    println("    JMPE .L.not.true.%d", c);
     println("    MOV R0, 0");
-    println("    JMP .L.not.end.%d", count());
-    println(".L.not.true.%d:", count()-1);
+    println("    JMP .L.not.end.%d", c);
+    println(".L.not.true.%d:", c);
     println("    MOV R0, 1");
-    println(".L.not.end.%d:", count()-1);
+    println(".L.not.end.%d:", c);
     return;
+  }
   case ND_BITNOT:
     gen_expr(node->lhs);
     println("    NOT R0");
@@ -417,7 +418,9 @@ static void emit_data(Obj *prog) {
                 println("    DB %d", var->init_data[i]);
             }
         } else {
-            println("    DW 0 ; zero-initialized");
+            for (int i = 0; i < var->ty->size; i++) {
+                println("    DB 0");
+            }
         }
     }
 }

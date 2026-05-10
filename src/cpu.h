@@ -27,11 +27,14 @@ enum class Opcode : uint16_t {
     NOT, INC, DEC, CMP, JMP, JMPE, JMPNE, JMPG, JMPL, JMPGE, JMPLE,
     PUSH, POP, PUSHF, POPF, PUSHA, POPA, ENTER, LEAVE, NEG, TEST, CALL, RET, INT, IRET,
     IN, OUT, STI, CLI,
+    LGDT, LMSW, SMSW, VERR, VERW,
+    INT3,
     INVALID
 };
 
 enum class OperandType : uint16_t {
     REG, IMM, LABEL,
+    MEM_DIRECT,
     MEM_INDIRECT,
     MEM_REG_OFFSET,
     NONE
@@ -43,13 +46,27 @@ struct Operand {
     std::string name;
 };
 
+// Pmode
+struct MemoryRegion {
+    uint32_t base;
+    uint16_t limit;
+    uint16_t attr;
+};
+
 class CPU16 {
 private:
     std::vector<uint16_t> mem;
     std::vector<uint32_t> reg;
     size_t pc;
     std::atomic<bool> running;
+    bool halted;
     uint16_t flags;
+
+    //Pmode
+    std::vector<MemoryRegion> gdt;
+    uint16_t msw = 0;
+    uint16_t cpl = 0;
+
     std::shared_ptr<Peripherals> peripherals;
     std::unordered_map<std::string, Opcode> opcodes;
 
@@ -103,10 +120,23 @@ private:
     void op_ret();
     void op_int();
     void op_iret();
+    void op_int3();
     void op_in();
     void op_out();
     void op_sti();
     void op_cli();
+
+    // Pmode
+    uint16_t safe_read(size_t addr);
+    void safe_write(size_t addr, uint16_t value);
+    bool validate_access(size_t addr, bool write);
+    bool pfault();
+
+    void op_lgdt();
+    void op_lmsw();
+    void op_smsw();
+    void op_verr();
+    void op_verw();
 
 public:
     CPU16(std::shared_ptr<Peripherals> peri);

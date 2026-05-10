@@ -1,0 +1,1 @@
+../chibicc -o os.asm os.c

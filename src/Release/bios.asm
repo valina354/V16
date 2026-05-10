@@ -11,40 +11,13 @@ start:
     LEA R0, bios_msg
     CALL print_string
     
-    MOV R0, 20
-    CALL delay
-    
-    LEA R0, cpu_test_msg
-    CALL print_string
-    CALL cpu_test
-    LEA R0, ok_msg
-    CALL print_string
-
-    MOV R0, 10
-    CALL delay
-
-    LEA R0, mem_test_msg
-    CALL print_string
-    CALL memory_test
-    LEA R0, ok_msg
-    CALL print_string
-    
-    MOV R0, 10
-    CALL delay
-
-    LEA R0, boot_msg
-    CALL print_string
-    
-    MOV R0, 50
-    CALL delay
-    
     JMP 0x1000
 
 clear_screen:
     PUSHA
     MOV R12, R1
     SHL R12, 8
-    OR R12, 32         ; Space character with attribute in R1
+    OR R12, 32         ; Space character
     MOV R0, 0x07       ; Port 0x07: Screen Fill
     OUT R0, R12
     MOV R10, 0
@@ -72,22 +45,45 @@ print_char:
     LEA R13, current_attribute
     MOV R1, [R13]
     
+    CMP R3, 8
+    JMPE handle_backspace
     CMP R3, 10
     JMPE handle_newline
     
     CALL get_cursor_pos
     MOV R10, R4
     
+    ; Check if we need to scroll before printing
+    CALL check_scroll
+    CALL get_cursor_pos
+    MOV R10, R4
+
     MOV R2, R1
     SHL R2, 8
     OR R2, R3
     
-    MOV R0, 0x05       ; Port 0x05: VRAM Address
+    MOV R0, 0x05       ; VRAM Address
     OUT R0, R10
-    MOV R0, 0x06       ; Port 0x06: VRAM Data
+    MOV R0, 0x06       ; VRAM Data
     OUT R0, R2
     
     INC R10
+    CALL set_cursor_pos
+    JMP print_char_end
+	
+handle_backspace:
+    CALL get_cursor_pos
+    MOV R10, R4
+    CMP R10, 0
+    JMPE print_char_end
+    DEC R10
+    MOV R2, R1
+    SHL R2, 8
+    OR R2, 32
+    MOV R0, 0x05
+    OUT R0, R10
+    MOV R0, 0x06
+    OUT R0, R2
     CALL set_cursor_pos
     JMP print_char_end
 
@@ -99,8 +95,61 @@ handle_newline:
     INC R10
     MUL R10, R11
     CALL set_cursor_pos
+    CALL check_scroll       ; Scroll if newline pushed us off screen
 
 print_char_end:
+    POPA
+    RET
+
+check_scroll:
+    PUSHA
+    CALL get_cursor_pos
+    CMP R4, 2000
+    JMPL check_scroll_done
+
+    ; Scroll Logic: Copy rows 1-24 to 0-23
+    MOV R10, 0          ; Destination Index
+scroll_loop:
+    CMP R10, 1920       ; 80 * 24
+    JMPGE scroll_clear_last_line
+    
+    MOV R11, R10
+    ADD R11, 80         ; Source Index (Current + 80)
+    
+    MOV R0, 0x05
+    OUT R0, R11         ; Set source pointer
+    MOV R0, 0x06
+    IN R12, R0          ; Read char+attr from source
+    
+    MOV R0, 0x05
+    OUT R0, R10         ; Set destination pointer
+    MOV R0, 0x06
+    OUT R0, R12         ; Write char+attr to destination
+    
+    INC R10
+    JMP scroll_loop
+
+scroll_clear_last_line:
+    MOV R10, 1920
+    LEA R13, current_attribute
+    MOV R12, [R13]
+    SHL R12, 8
+    OR R12, 32          ; Space with attribute
+clear_last_loop:
+    CMP R10, 2000
+    JMPGE scroll_finish
+    MOV R0, 0x05
+    OUT R0, R10
+    MOV R0, 0x06
+    OUT R0, R12
+    INC R10
+    JMP clear_last_loop
+
+scroll_finish:
+    MOV R10, 1920
+    CALL set_cursor_pos
+
+check_scroll_done:
     POPA
     RET
 
@@ -109,13 +158,13 @@ get_cursor_pos:
     PUSH R1
     PUSH R2
     PUSH R3
-    MOV R0, 0x01       ; Port 0x01: CRTC Address
-    MOV R1, 0x0E       ; High byte
+    MOV R0, 0x01
+    MOV R1, 0x0E
     OUT R0, R1
-    MOV R0, 0x02       ; Port 0x02: CRTC Data
+    MOV R0, 0x02
     IN R2, R0
     MOV R0, 0x01
-    MOV R1, 0x0F       ; Low byte
+    MOV R1, 0x0F
     OUT R0, R1
     MOV R0, 0x02
     IN R3, R0
@@ -133,27 +182,29 @@ set_cursor_pos:
     MOV R2, R10
     MOV R3, R2
     SHR R2, 8
-    MOV R0, 0x01       ; Port 0x01: CRTC Address
-    MOV R1, 0x0E       ; High Byte
+    MOV R0, 0x01
+    MOV R1, 0x0E
     OUT R0, R1
-    MOV R0, 0x02       ; Port 0x02: CRTC Data
+    MOV R0, 0x02
     OUT R0, R2
     AND R3, 0xFF
     MOV R0, 0x01
-    MOV R1, 0x0F       ; Low Byte
+    MOV R1, 0x0F
     OUT R0, R1
     MOV R0, 0x02
     OUT R0, R3
     POPA
     RET
 
-; INT 0x00-0x09 reserved for hardware interrupts
 setup_ivt:
     LEA R0, div_zero_handler
     MOV R1, 0x00
     MOV [R1], R0
     LEA R0, invalid_op_handler
     MOV R1, 0x01
+    MOV [R1], R0
+	LEA R0, gpf_handler
+    MOV R1, 0x02
     MOV [R1], R0
     LEA R0, video_service
     MOV R1, 0x10
@@ -167,37 +218,18 @@ video_service:
     PUSHA
     CMP R0, 0x01
     JMPE vs_print_char
-    CMP R0, 0x02
-    JMPE vs_set_cursor
-    CMP R0, 0x03
-    JMPE vs_get_cursor
     CMP R0, 0x04
     JMPE vs_clear_screen
-    CMP R0, 0x05
-    JMPE vs_cursor_enable
     JMP video_service_end
 vs_print_char:
     MOV R3, R2
     CALL print_char
-    JMP video_service_end
-vs_get_cursor:
-    CALL get_cursor_pos
-    MOV R2, R4
-    JMP video_service_end
-vs_set_cursor:
-    MOV R10, R2
-    CALL set_cursor_pos
     JMP video_service_end
 vs_clear_screen:
     LEA R13, current_attribute
     MOV [R13], R2
     MOV R1, R2
     CALL clear_screen
-    JMP video_service_end
-vs_cursor_enable:
-    MOV R0, 0x04
-    OUT R0, R2
-    JMP video_service_end
 video_service_end:
     POPA
     IRET
@@ -205,10 +237,7 @@ video_service_end:
 keyboard_service:
     CMP R0, 0x00
     JMPE kb_getc
-    CMP R0, 0x01
-    JMPE kb_status
     IRET
-
 kb_getc:
     IN R1, 0x08
     CMP R1, 0
@@ -216,86 +245,21 @@ kb_getc:
     IN R2, 0x09
     IRET
 
-kb_status:
-    IN R2, 0x08
-    IRET
-
-cpu_test:
-    PUSHA
-    MOV R0, 0xAAAA
-    MOV R1, 0x5555
-    ADD R0, R1
-    CMP R0, 0xFFFF
-    JMPNE cpu_test_fail
-    MOV R0, 0x1000
-    MOV R1, 0x0100
-    SUB R0, R1
-    CMP R0, 0x0F00
-    JMPNE cpu_test_fail
-    POPA
-    RET
-cpu_test_fail:
-    LEA R0, cpu_fail_msg
-    CALL print_string
-    cpu_loop: JMP cpu_loop
-
-memory_test:
-    PUSHA
-    MOV R10, MEM_TEST_START
-mem_test_loop:
-    CMP R10, MEM_TEST_END
-    JMPGE mem_test_success
-    MOV R0, 0xAAAA      
-    MOV [R10], R0
-    MOV R1, [R10]
-    CMP R0, R1
-    JMPNE memory_test_fail
-    INC R10
-    JMP mem_test_loop
-mem_test_success:
-    POPA
-    RET
-
-memory_test_fail:
-    LEA R0, mem_fail_msg
-    CALL print_string
-    mem_loop: JMP mem_loop
-
 div_zero_handler:
     LEA R0, div_zero_msg
     CALL print_string
-    fault_loop_1: JMP fault_loop_1
+    f1: JMP f1
 invalid_op_handler:
     LEA R0, invalid_op_msg
     CALL print_string
-    fault_loop_2: JMP fault_loop_2
+    f2: JMP f2
+gpf_handler:
+    LEA R0, gpf_msg
+    CALL print_string
+    gpf_stop: JMP gpf_stop 
 
-delay:
-    PUSHA
-delay_outer:
-    CMP R0, 0
-    JMPE delay_done
-delay_inner:
-    IN R1, 0x03        ; Port 0x03: Timer
-    CMP R1, 1
-    JMPNE delay_inner
-    DEC R0
-    JMP delay_outer
-delay_done:
-    POPA
-    RET
-
-bios_msg:               DB "CPU16 BIOS", 10, 0
-cpu_test_msg:           DB "Testing CPU... ", 0
-mem_test_msg:           DB "Testing Memory... ", 0
-ok_msg:                 DB "Passed.", 10, 0
-cpu_fail_msg:           DB 10, "CPU Test Failed!", 0
-mem_fail_msg:           DB 10, "Memory Test Failed!", 0
+bios_msg:               DB "CPU16 BIOS v1.1 - SCROLL ENABLED", 10, 0
 div_zero_msg:           DB 10, "Div by Zero!", 0
 invalid_op_msg:         DB 10, "Invalid Opcode!", 0
-boot_msg:               DB 10, "Booting Program...", 0
+gpf_msg:                DB 10, "General Protection Fault!", 0
 current_attribute:      DW 0x1F
-number_buffer:          DB 32, 32, 32, 32, 32, 32, 0
-number_buffer_end:
-MEM_TEST_START:         DW 0x2000
-MEM_TEST_END:           DW 0x4000

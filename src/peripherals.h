@@ -6,6 +6,7 @@
 #include <vector>
 #include <mutex>
 #include <SDL.h>
+#include <fstream>
 #include "cpu.h"
 #ifdef _WIN32
 #include <windows.h>

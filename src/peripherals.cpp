@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
 
 Peripherals::Peripherals(CPU16& owner_cpu) : cpu(owner_cpu), window(nullptr), renderer(nullptr) {
     if (SDL_Init(SDL_INIT_VIDEO) < 0) return;
@@ -49,6 +50,11 @@ uint16_t Peripherals::read_port(uint16_t port) {
         return cursor_enabled ? 1 : 0;
     case 0x05: // Read VRAM Pointer
         return vram_address_ptr;
+    case 0x06: // Read Char+Attr from VRAM and increment pointer
+        if (vram_address_ptr < TEXT_COLS * TEXT_ROWS) {
+            return vga_text_buffer[vram_address_ptr++];
+        }
+        return 0;
     case 0x08: // Keyboard Status: returns buffer size
         return (uint16_t)keyboard_buffer.size();
     case 0x09: // Keyboard Data: pop oldest key

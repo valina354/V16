@@ -5,7 +5,7 @@
 // char:  1 byte
 // short: 2 bytes
 // int:   2 bytes
-// long:  2 bytes ()
+// long:  2 bytes (same as int)
 // ptr:   2 bytes
 //
 
