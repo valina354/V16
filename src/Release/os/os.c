@@ -2,7 +2,8 @@
 
 #define CMD_BUFFER_SIZE 64
 
-#define GDT_REGION_COUNT 2
+#define GDT_REGION_COUNT 16
+#define GDT_STRIDE 3 
 
 #define GDT_CODE_BASE    0x0000
 #define GDT_CODE_LIMIT   0x7FFF
@@ -17,8 +18,8 @@ int cmd_ptr = 0;
 
 int verify_result;
 
-/* 2 regions * 3 words */
-int gdt_table[GDT_REGION_COUNT * 3];
+/* 2 regions */
+int gdt_table[GDT_REGION_COUNT * GDT_STRIDE];
 
 int cpu_status_word = 0;
 
@@ -26,6 +27,11 @@ void drop_to_user(void);
 
 void setup_gdt(void)
 {
+    int i;
+    for (i = 0; i < 48; i++) {
+        gdt_table[i] = 0;
+    }
+
     /*
         Region 0:
         Global Code + Stack

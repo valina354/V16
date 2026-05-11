@@ -1,6 +1,6 @@
     JMP main
     ; Data Section
-.L..53:
+.L..55:
     DB 83
     DB 121
     DB 115
@@ -15,7 +15,7 @@
     DB 121
     DB 10
     DB 0
-.L..52:
+.L..54:
     DB 86
     DB 45
     DB 68
@@ -28,19 +28,19 @@
     DB 48
     DB 10
     DB 0
+.L..53:
+    DB 109
+    DB 97
+    DB 105
+    DB 110
+    DB 0
+.L..52:
+    DB 109
+    DB 97
+    DB 105
+    DB 110
+    DB 0
 .L..51:
-    DB 109
-    DB 97
-    DB 105
-    DB 110
-    DB 0
-.L..50:
-    DB 109
-    DB 97
-    DB 105
-    DB 110
-    DB 0
-.L..49:
     DB 67
     DB 111
     DB 109
@@ -77,17 +77,17 @@
     DB 71
     DB 10
     DB 0
-.L..48:
+.L..50:
     DB 68
     DB 66
     DB 71
     DB 0
-.L..47:
+.L..49:
     DB 71
     DB 80
     DB 70
     DB 0
-.L..46:
+.L..48:
     DB 83
     DB 84
     DB 65
@@ -95,7 +95,7 @@
     DB 85
     DB 83
     DB 0
-.L..45:
+.L..47:
     DB 86
     DB 69
     DB 82
@@ -103,45 +103,45 @@
     DB 70
     DB 89
     DB 0
+.L..46:
+    DB 112
+    DB 114
+    DB 111
+    DB 99
+    DB 101
+    DB 115
+    DB 115
+    DB 95
+    DB 99
+    DB 111
+    DB 109
+    DB 109
+    DB 97
+    DB 110
+    DB 100
+    DB 0
+.L..45:
+    DB 112
+    DB 114
+    DB 111
+    DB 99
+    DB 101
+    DB 115
+    DB 115
+    DB 95
+    DB 99
+    DB 111
+    DB 109
+    DB 109
+    DB 97
+    DB 110
+    DB 100
+    DB 0
 .L..44:
-    DB 112
-    DB 114
-    DB 111
-    DB 99
-    DB 101
-    DB 115
-    DB 115
-    DB 95
-    DB 99
-    DB 111
-    DB 109
-    DB 109
-    DB 97
-    DB 110
-    DB 100
-    DB 0
-.L..43:
-    DB 112
-    DB 114
-    DB 111
-    DB 99
-    DB 101
-    DB 115
-    DB 115
-    DB 95
-    DB 99
-    DB 111
-    DB 109
-    DB 109
-    DB 97
-    DB 110
-    DB 100
-    DB 0
-.L..42:
     DB 62
     DB 32
     DB 0
-.L..41:
+.L..43:
     DB 115
     DB 104
     DB 111
@@ -153,41 +153,41 @@
     DB 109
     DB 112
     DB 116
+    DB 0
+.L..42:
+    DB 115
+    DB 104
+    DB 111
+    DB 119
+    DB 95
+    DB 112
+    DB 114
+    DB 111
+    DB 109
+    DB 112
+    DB 116
+    DB 0
+.L..41:
+    DB 100
+    DB 98
+    DB 103
     DB 0
 .L..40:
-    DB 115
-    DB 104
-    DB 111
-    DB 119
-    DB 95
-    DB 112
-    DB 114
-    DB 111
-    DB 109
-    DB 112
-    DB 116
+    DB 100
+    DB 98
+    DB 103
     DB 0
 .L..39:
-    DB 100
-    DB 98
     DB 103
+    DB 112
+    DB 102
     DB 0
 .L..38:
-    DB 100
-    DB 98
     DB 103
+    DB 112
+    DB 102
     DB 0
 .L..37:
-    DB 103
-    DB 112
-    DB 102
-    DB 0
-.L..36:
-    DB 103
-    DB 112
-    DB 102
-    DB 0
-.L..35:
     DB 77
     DB 83
     DB 87
@@ -195,7 +195,7 @@
     DB 61
     DB 32
     DB 0
-.L..34:
+.L..36:
     DB 82
     DB 101
     DB 97
@@ -212,33 +212,33 @@
     DB 46
     DB 10
     DB 0
+.L..35:
+    DB 115
+    DB 104
+    DB 111
+    DB 119
+    DB 95
+    DB 115
+    DB 116
+    DB 97
+    DB 116
+    DB 117
+    DB 115
+    DB 0
+.L..34:
+    DB 115
+    DB 104
+    DB 111
+    DB 119
+    DB 95
+    DB 115
+    DB 116
+    DB 97
+    DB 116
+    DB 117
+    DB 115
+    DB 0
 .L..33:
-    DB 115
-    DB 104
-    DB 111
-    DB 119
-    DB 95
-    DB 115
-    DB 116
-    DB 97
-    DB 116
-    DB 117
-    DB 115
-    DB 0
-.L..32:
-    DB 115
-    DB 104
-    DB 111
-    DB 119
-    DB 95
-    DB 115
-    DB 116
-    DB 97
-    DB 116
-    DB 117
-    DB 115
-    DB 0
-.L..31:
     DB 82
     DB 101
     DB 115
@@ -255,7 +255,7 @@
     DB 68
     DB 10
     DB 0
-.L..30:
+.L..32:
     DB 82
     DB 101
     DB 115
@@ -275,7 +275,7 @@
     DB 68
     DB 10
     DB 0
-.L..29:
+.L..31:
     DB 67
     DB 104
     DB 101
@@ -309,45 +309,45 @@
     DB 46
     DB 10
     DB 0
+.L..30:
+    DB 118
+    DB 101
+    DB 114
+    DB 105
+    DB 102
+    DB 121
+    DB 95
+    DB 114
+    DB 111
+    DB 95
+    DB 115
+    DB 101
+    DB 103
+    DB 109
+    DB 101
+    DB 110
+    DB 116
+    DB 0
+.L..29:
+    DB 118
+    DB 101
+    DB 114
+    DB 105
+    DB 102
+    DB 121
+    DB 95
+    DB 114
+    DB 111
+    DB 95
+    DB 115
+    DB 101
+    DB 103
+    DB 109
+    DB 101
+    DB 110
+    DB 116
+    DB 0
 .L..28:
-    DB 118
-    DB 101
-    DB 114
-    DB 105
-    DB 102
-    DB 121
-    DB 95
-    DB 114
-    DB 111
-    DB 95
-    DB 115
-    DB 101
-    DB 103
-    DB 109
-    DB 101
-    DB 110
-    DB 116
-    DB 0
-.L..27:
-    DB 118
-    DB 101
-    DB 114
-    DB 105
-    DB 102
-    DB 121
-    DB 95
-    DB 114
-    DB 111
-    DB 95
-    DB 115
-    DB 101
-    DB 103
-    DB 109
-    DB 101
-    DB 110
-    DB 116
-    DB 0
-.L..26:
     DB 83
     DB 119
     DB 105
@@ -372,35 +372,35 @@
     DB 46
     DB 10
     DB 0
+.L..27:
+    DB 100
+    DB 114
+    DB 111
+    DB 112
+    DB 95
+    DB 116
+    DB 111
+    DB 95
+    DB 117
+    DB 115
+    DB 101
+    DB 114
+    DB 0
+.L..26:
+    DB 100
+    DB 114
+    DB 111
+    DB 112
+    DB 95
+    DB 116
+    DB 111
+    DB 95
+    DB 117
+    DB 115
+    DB 101
+    DB 114
+    DB 0
 .L..25:
-    DB 100
-    DB 114
-    DB 111
-    DB 112
-    DB 95
-    DB 116
-    DB 111
-    DB 95
-    DB 117
-    DB 115
-    DB 101
-    DB 114
-    DB 0
-.L..24:
-    DB 100
-    DB 114
-    DB 111
-    DB 112
-    DB 95
-    DB 116
-    DB 111
-    DB 95
-    DB 117
-    DB 115
-    DB 101
-    DB 114
-    DB 0
-.L..23:
     DB 80
     DB 114
     DB 111
@@ -425,7 +425,7 @@
     DB 100
     DB 10
     DB 0
-.L..22:
+.L..24:
     DB 101
     DB 110
     DB 116
@@ -435,7 +435,7 @@
     DB 112
     DB 109
     DB 0
-.L..21:
+.L..23:
     DB 101
     DB 110
     DB 116
@@ -471,6 +471,90 @@ cpu_status_word:
     DB 0
     DB 0
 gdt_table:
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
+    DB 0
     DB 0
     DB 0
     DB 0
@@ -664,11 +748,11 @@ main:
     PUSH R11
     CALL cls
     CALL enter_pm
-    MOV R0, .L..52
+    MOV R0, .L..54
     PUSH R0
     POP R0
     CALL print
-    MOV R0, .L..53
+    MOV R0, .L..55
     PUSH R0
     POP R0
     CALL print
@@ -676,7 +760,7 @@ main:
 .L.begin.1:
     MOV R0, 1
     CMP R0, 0
-    JMPE .L..54
+    JMPE .L..56
     LEA R0, [BP-5]
     MOV R1, 0
     MOV R2, R0
@@ -863,9 +947,9 @@ main:
 .L.end.8:
 .L.end.4:
 .L.end.2:
-.L..55:
+.L..57:
     JMP .L.begin.1
-.L..54:
+.L..56:
     MOV R0, 0
     JMP .L.return.main
 .L.return.main:
@@ -898,7 +982,7 @@ process_command:
     CALL putc
     MOV R0, cmd_buffer
     PUSH R0
-    MOV R0, .L..45
+    MOV R0, .L..47
     PUSH R0
     POP R1
     POP R0
@@ -910,7 +994,7 @@ process_command:
 .L.else.12:
     MOV R0, cmd_buffer
     PUSH R0
-    MOV R0, .L..46
+    MOV R0, .L..48
     PUSH R0
     POP R1
     POP R0
@@ -922,7 +1006,7 @@ process_command:
 .L.else.13:
     MOV R0, cmd_buffer
     PUSH R0
-    MOV R0, .L..47
+    MOV R0, .L..49
     PUSH R0
     POP R1
     POP R0
@@ -934,7 +1018,7 @@ process_command:
 .L.else.14:
     MOV R0, cmd_buffer
     PUSH R0
-    MOV R0, .L..48
+    MOV R0, .L..50
     PUSH R0
     POP R1
     POP R0
@@ -944,7 +1028,7 @@ process_command:
     CALL dbg
     JMP .L.end.15
 .L.else.15:
-    MOV R0, .L..49
+    MOV R0, .L..51
     PUSH R0
     POP R0
     CALL print
@@ -981,7 +1065,7 @@ show_prompt:
     PUSH R9
     PUSH R10
     PUSH R11
-    MOV R0, .L..42
+    MOV R0, .L..44
     PUSH R0
     POP R0
     CALL print
@@ -1056,14 +1140,14 @@ show_status:
     PUSH R9
     PUSH R10
     PUSH R11
-    MOV R0, .L..34
+    MOV R0, .L..36
     PUSH R0
     POP R0
     CALL print
     SMSW R0
     LEA R1, cpu_status_word
     MOV [R1], R0
-    MOV R0, .L..35
+    MOV R0, .L..37
     PUSH R0
     POP R0
     CALL print
@@ -1100,7 +1184,7 @@ verify_ro_segment:
     PUSH R9
     PUSH R10
     PUSH R11
-    MOV R0, .L..29
+    MOV R0, .L..31
     PUSH R0
     POP R0
     CALL print
@@ -1122,13 +1206,13 @@ verify_ro_segment:
 .L.end.17:
     CMP R0, 0
     JMPE .L.else.16
-    MOV R0, .L..30
+    MOV R0, .L..32
     PUSH R0
     POP R0
     CALL print
     JMP .L.end.16
 .L.else.16:
-    MOV R0, .L..31
+    MOV R0, .L..33
     PUSH R0
     POP R0
     CALL print
@@ -1159,7 +1243,7 @@ enter_pm:
     CALL setup_gdt
     MOV R0, 1
     LMSW R0
-    MOV R0, .L..23
+    MOV R0, .L..25
     PUSH R0
     POP R0
     CALL print
@@ -1178,7 +1262,7 @@ enter_pm:
 
 ; Function: setup_gdt
 setup_gdt:
-    ENTER 2
+    ENTER 6
     PUSH R4
     PUSH R5
     PUSH R6
@@ -1187,6 +1271,64 @@ setup_gdt:
     PUSH R9
     PUSH R10
     PUSH R11
+    LEA R0, [BP-4]
+    PUSH R0
+    MOV R0, 0
+    POP R1
+    MOV [R1], R0
+.L.begin.18:
+    MOV R0, 48
+    PUSH R0
+    LEA R0, [BP-4]
+    MOV R0, [R0]
+    POP R1
+    CMP R0, R1
+    JMPL .L.true.19
+    MOV R0, 0
+    JMP .L.end.19
+.L.true.19:
+    MOV R0, 1
+.L.end.19:
+    CMP R0, 0
+    JMPE .L..21
+    MOV R0, 2
+    PUSH R0
+    LEA R0, [BP-4]
+    MOV R0, [R0]
+    POP R1
+    MUL R0, R1
+    PUSH R0
+    MOV R0, gdt_table
+    POP R1
+    ADD R0, R1
+    PUSH R0
+    MOV R0, 0
+    POP R1
+    MOV [R1], R0
+.L..22:
+    MOV R0, -1
+    PUSH R0
+    LEA R0, [BP-2]
+    PUSH R0
+    LEA R0, [BP-4]
+    POP R1
+    MOV [R1], R0
+    LEA R0, [BP-2]
+    MOV R0, [R0]
+    PUSH R0
+    MOV R0, 1
+    PUSH R0
+    LEA R0, [BP-2]
+    MOV R0, [R0]
+    MOV R0, [R0]
+    POP R1
+    ADD R0, R1
+    POP R1
+    MOV [R1], R0
+    POP R1
+    ADD R0, R1
+    JMP .L.begin.18
+.L..21:
     MOV R0, 2
     PUSH R0
     MOV R0, 0
@@ -1290,7 +1432,7 @@ drop_to_user:
     PUSH R9
     PUSH R10
     PUSH R11
-    MOV R0, .L..26
+    MOV R0, .L..28
     PUSH R0
     POP R0
     CALL print
@@ -1335,7 +1477,7 @@ cmd_is:
     MOV R0, 0
     POP R1
     MOV [R1], R0
-.L.begin.18:
+.L.begin.20:
     MOV R0, 1
     CMP R0, 0
     JMPE .L..17
@@ -1385,35 +1527,35 @@ cmd_is:
     MOV R0, 97
     POP R1
     CMP R0, R1
-    JMPLE .L.true.21
+    JMPLE .L.true.23
     MOV R0, 0
-    JMP .L.end.21
-.L.true.21:
+    JMP .L.end.23
+.L.true.23:
     MOV R0, 1
-.L.end.21:
+.L.end.23:
     CMP R0, 0
-    JMPE .L.false.20
+    JMPE .L.false.22
     MOV R0, 122
     PUSH R0
     LEA R0, [BP-8]
     MOV R0, [R0]
     POP R1
     CMP R0, R1
-    JMPLE .L.true.22
+    JMPLE .L.true.24
     MOV R0, 0
-    JMP .L.end.22
-.L.true.22:
+    JMP .L.end.24
+.L.true.24:
     MOV R0, 1
+.L.end.24:
+    CMP R0, 0
+    JMPE .L.false.22
+    MOV R0, 1
+    JMP .L.end.22
+.L.false.22:
+    MOV R0, 0
 .L.end.22:
     CMP R0, 0
-    JMPE .L.false.20
-    MOV R0, 1
-    JMP .L.end.20
-.L.false.20:
-    MOV R0, 0
-.L.end.20:
-    CMP R0, 0
-    JMPE .L.else.19
+    JMPE .L.else.21
     LEA R0, [BP-4]
     PUSH R0
     LEA R0, [BP-8]
@@ -1431,9 +1573,9 @@ cmd_is:
     SUB R0, R1
     POP R1
     MOV [R1], R0
-    JMP .L.end.19
-.L.else.19:
-.L.end.19:
+    JMP .L.end.21
+.L.else.21:
+.L.end.21:
     LEA R0, [BP-6]
     MOV R0, [R0]
     PUSH R0
@@ -1441,26 +1583,7 @@ cmd_is:
     MOV R0, [R0]
     POP R1
     CMP R0, R1
-    JMPNE .L.true.24
-    MOV R0, 0
-    JMP .L.end.24
-.L.true.24:
-    MOV R0, 1
-.L.end.24:
-    CMP R0, 0
-    JMPE .L.else.23
-    MOV R0, 0
-    JMP .L.return.cmd_is
-    JMP .L.end.23
-.L.else.23:
-.L.end.23:
-    MOV R0, 0
-    PUSH R0
-    LEA R0, [BP-8]
-    MOV R0, [R0]
-    POP R1
-    CMP R0, R1
-    JMPE .L.true.26
+    JMPNE .L.true.26
     MOV R0, 0
     JMP .L.end.26
 .L.true.26:
@@ -1468,11 +1591,30 @@ cmd_is:
 .L.end.26:
     CMP R0, 0
     JMPE .L.else.25
-    MOV R0, 1
+    MOV R0, 0
     JMP .L.return.cmd_is
     JMP .L.end.25
 .L.else.25:
 .L.end.25:
+    MOV R0, 0
+    PUSH R0
+    LEA R0, [BP-8]
+    MOV R0, [R0]
+    POP R1
+    CMP R0, R1
+    JMPE .L.true.28
+    MOV R0, 0
+    JMP .L.end.28
+.L.true.28:
+    MOV R0, 1
+.L.end.28:
+    CMP R0, 0
+    JMPE .L.else.27
+    MOV R0, 1
+    JMP .L.return.cmd_is
+    JMP .L.end.27
+.L.else.27:
+.L.end.27:
     MOV R0, -1
     PUSH R0
     LEA R0, [BP-2]
@@ -1495,7 +1637,7 @@ cmd_is:
     POP R1
     ADD R0, R1
 .L..18:
-    JMP .L.begin.18
+    JMP .L.begin.20
 .L..17:
 .L.return.cmd_is:
     POP R11
@@ -1806,19 +1948,19 @@ print_hex:
     MOV R0, 28
     POP R1
     MOV [R1], R0
-.L.begin.27:
+.L.begin.29:
     LEA R0, [BP-6]
     MOV R0, [R0]
     PUSH R0
     MOV R0, 0
     POP R1
     CMP R0, R1
-    JMPLE .L.true.28
+    JMPLE .L.true.30
     MOV R0, 0
-    JMP .L.end.28
-.L.true.28:
+    JMP .L.end.30
+.L.true.30:
     MOV R0, 1
-.L.end.28:
+.L.end.30:
     CMP R0, 0
     JMPE .L..13
     LEA R0, [BP-4]
@@ -1846,6 +1988,38 @@ print_hex:
     MOV R0, [R0]
     POP R1
     CMP R0, R1
+    JMPNE .L.true.34
+    MOV R0, 0
+    JMP .L.end.34
+.L.true.34:
+    MOV R0, 1
+.L.end.34:
+    CMP R0, 0
+    JMPNE .L.true.33
+    LEA R0, [BP-8]
+    MOV R0, [R0]
+    CMP R0, 0
+    JMPNE .L.true.33
+    MOV R0, 0
+    JMP .L.end.33
+.L.true.33:
+    MOV R0, 1
+.L.end.33:
+    CMP R0, 0
+    JMPNE .L.true.32
+    MOV R0, 0
+    PUSH R0
+    LEA R0, [BP-6]
+    MOV R0, [R0]
+    POP R1
+    CMP R0, R1
+    JMPE .L.true.35
+    MOV R0, 0
+    JMP .L.end.35
+.L.true.35:
+    MOV R0, 1
+.L.end.35:
+    CMP R0, 0
     JMPNE .L.true.32
     MOV R0, 0
     JMP .L.end.32
@@ -1853,39 +2027,7 @@ print_hex:
     MOV R0, 1
 .L.end.32:
     CMP R0, 0
-    JMPNE .L.true.31
-    LEA R0, [BP-8]
-    MOV R0, [R0]
-    CMP R0, 0
-    JMPNE .L.true.31
-    MOV R0, 0
-    JMP .L.end.31
-.L.true.31:
-    MOV R0, 1
-.L.end.31:
-    CMP R0, 0
-    JMPNE .L.true.30
-    MOV R0, 0
-    PUSH R0
-    LEA R0, [BP-6]
-    MOV R0, [R0]
-    POP R1
-    CMP R0, R1
-    JMPE .L.true.33
-    MOV R0, 0
-    JMP .L.end.33
-.L.true.33:
-    MOV R0, 1
-.L.end.33:
-    CMP R0, 0
-    JMPNE .L.true.30
-    MOV R0, 0
-    JMP .L.end.30
-.L.true.30:
-    MOV R0, 1
-.L.end.30:
-    CMP R0, 0
-    JMPE .L.else.29
+    JMPE .L.else.31
     MOV R0, 1
     PUSH R0
     LEA R0, [BP-4]
@@ -1906,9 +2048,9 @@ print_hex:
     MOV R0, 1
     POP R1
     MOV [R1], R0
-    JMP .L.end.29
-.L.else.29:
-.L.end.29:
+    JMP .L.end.31
+.L.else.31:
+.L.end.31:
     LEA R0, [BP-2]
     PUSH R0
     LEA R0, [BP-6]
@@ -1927,7 +2069,7 @@ print_hex:
     POP R1
     MOV [R1], R0
 .L..14:
-    JMP .L.begin.27
+    JMP .L.begin.29
 .L..13:
 .L.return.print_hex:
     POP R11
@@ -1962,7 +2104,7 @@ print:
     MOV R0, 0
     POP R1
     MOV [R1], R0
-.L.begin.34:
+.L.begin.36:
     MOV R0, 0
     PUSH R0
     MOV R0, 1
@@ -1979,12 +2121,12 @@ print:
     MOV R0, [R0]
     POP R1
     CMP R0, R1
-    JMPNE .L.true.35
+    JMPNE .L.true.37
     MOV R0, 0
-    JMP .L.end.35
-.L.true.35:
+    JMP .L.end.37
+.L.true.37:
     MOV R0, 1
-.L.end.35:
+.L.end.37:
     CMP R0, 0
     JMPE .L..8
     MOV R0, 1
@@ -2014,7 +2156,7 @@ print:
     POP R1
     MOV [R1], R0
 .L..9:
-    JMP .L.begin.34
+    JMP .L.begin.36
 .L..8:
 .L.return.print:
     POP R11
